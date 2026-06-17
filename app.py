@@ -179,61 +179,71 @@ def photos():
 
     fotos = os.listdir(PHOTOS_FOLDER)
 
-   html = """
-<html>
-<body style="
-    font-family:Arial;
-    background:#111;
-    color:white;
-">
+    html = """
+    <html>
+    <body style="
+        font-family:Arial;
+        background:#111;
+        color:white;
+    ">
 
-<h1 style="text-align:center;">
-📸 Fotos
-</h1>
+    <h1 style="text-align:center;">
+        📸 Fotos
+    </h1>
 
-<div style="
-    display:grid;
-    grid-template-columns:
-        repeat(auto-fill,minmax(250px,1fr));
-    gap:20px;
-    padding:20px;
-">
-"""
+    <div style="text-align:center;">
+        <a href="/">⬅ Volver</a>
+    </div>
+
+    <br>
+
+    <div style="
+        display:grid;
+        grid-template-columns:
+            repeat(auto-fill,minmax(250px,1fr));
+        gap:20px;
+        padding:20px;
+    ">
+    """
 
     for foto in fotos:
 
-       html += f"""
-<div style="
-    background:#222;
-    padding:10px;
-    border-radius:10px;
-    text-align:center;
-">
+        html += f"""
+        <div style="
+            background:#222;
+            padding:10px;
+            border-radius:10px;
+            text-align:center;
+        ">
 
-    <a href="/photo/{foto}" target="_blank">
-        <img
-            src="/photo/{foto}"
-            style="
-                width:100%;
-                height:250px;
-                object-fit:cover;
-                border-radius:10px;
-            "
-        >
-    </a>
+            <a href="/photo/{foto}" target="_blank">
+                <img
+                    src="/photo/{foto}"
+                    style="
+                        width:100%;
+                        height:250px;
+                        object-fit:cover;
+                        border-radius:10px;
+                    "
+                >
+            </a>
 
-    <br><br>
+            <br><br>
 
-    <a href="/delete/photo/{foto}">
-        <button>
-            🗑 Borrar
-        </button>
-    </a>
+            <a href="/delete/photo/{foto}">
+                <button>
+                    🗑 Borrar
+                </button>
+            </a>
 
-</div>
-"""
+        </div>
+        """
 
-    html += "</body></html>"
+    html += """
+    </div>
+    </body>
+    </html>
+    """
 
     return html
 
@@ -241,66 +251,75 @@ def photos():
 @requires_auth
 def videos():
 
-    videos = os.listdir(VIDEOS_FOLDER)
+    lista_videos = os.listdir(VIDEOS_FOLDER)
 
-   html = """
-<html>
-<body style="
-    font-family:Arial;
-    background:#111;
-    color:white;
-">
+    html = """
+    <html>
+    <body style="
+        font-family:Arial;
+        background:#111;
+        color:white;
+    ">
 
-<h1 style="text-align:center;">
-📸 videos
-</h1>
+    <h1 style="text-align:center;">
+        🎥 Videos
+    </h1>
 
-<div style="
-    display:grid;
-    grid-template-columns:
-        repeat(auto-fill,minmax(250px,1fr));
-    gap:20px;
-    padding:20px;
-">
-"""
+    <div style="text-align:center;">
+        <a href="/">⬅ Volver</a>
+    </div>
 
-    for video in videos:
+    <br>
+
+    <div style="
+        display:grid;
+        grid-template-columns:
+            repeat(auto-fill,minmax(300px,1fr));
+        gap:20px;
+        padding:20px;
+    ">
+    """
+
+    for video in lista_videos:
 
         html += f"""
-<div style="
-    background:#222;
-    padding:10px;
-    border-radius:10px;
-    text-align:center;
-">
-
-    <video
-        controls
-        style="
-            width:100%;
-            height:250px;
-            object-fit:cover;
+        <div style="
+            background:#222;
+            padding:10px;
             border-radius:10px;
-        "
-    >
-        <source src="/video/{video}">
-    </video>
+            text-align:center;
+        ">
 
-    <br><br>
+            <video
+                controls
+                style="
+                    width:100%;
+                    height:250px;
+                    object-fit:cover;
+                    border-radius:10px;
+                "
+            >
+                <source src="/video/{video}">
+            </video>
 
-    <a href="/delete/video/{video}">
-        <button>
-            🗑 Borrar
-        </button>
-    </a>
+            <br><br>
 
-</div>
-"""
+            <a href="/delete/video/{video}">
+                <button>
+                    🗑 Borrar
+                </button>
+            </a>
 
-    html += "</body></html>"
+        </div>
+        """
+
+    html += """
+    </div>
+    </body>
+    </html>
+    """
 
     return html
-
 
 @app.route("/photo/<filename>")
 @requires_auth
