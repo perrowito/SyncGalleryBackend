@@ -14,7 +14,7 @@ def home():
 def upload():
 
     if "photo" not in request.files:
-        return {"error": "no photo"}, 400
+        return {"error": "No photo"}, 400
 
     file = request.files["photo"]
 
@@ -25,7 +25,10 @@ def upload():
 
     file.save(ruta)
 
-    return {"ok": True}
+    return {
+        "ok": True,
+        "filename": file.filename
+    }
 
 if __name__ == "__main__":
     app.run(host="0.0.0.0", port=5000)
