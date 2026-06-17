@@ -29,7 +29,19 @@ def upload():
         "ok": True,
         "archivo": file.filename
     }
+@app.route("/clear")
+def clear():
 
+    for archivo in os.listdir(UPLOAD_FOLDER):
+
+        ruta = os.path.join(
+            UPLOAD_FOLDER,
+            archivo
+        )
+
+        os.remove(ruta)
+
+    return {"ok": True}
 @app.route("/files")
 def files():
 
