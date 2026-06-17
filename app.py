@@ -61,112 +61,52 @@ os.makedirs(VIDEOS_FOLDER, exist_ok=True)
 @requires_auth
 def home():
 
-    fotos = os.listdir(PHOTOS_FOLDER)
-    videos = os.listdir(VIDEOS_FOLDER)
-    total_fotos = len(fotos)
-    total_videos = len(videos)
-    html = """
+    fotos = len(os.listdir(PHOTOS_FOLDER))
+    videos = len(os.listdir(VIDEOS_FOLDER))
+
+    return f"""
     <html>
-    <head>
-        <title>SyncGallery</title>
-        <style>
-            body {
-                font-family: Arial;
-                background: #111;
-                color: white;
-                padding: 20px;
-            }
+    <body style="
+        font-family:Arial;
+        text-align:center;
+        margin-top:50px;
+    ">
 
-            img {
-                width: 200px;
-                margin: 10px;
-                border-radius: 10px;
-            }
+    <h1>📷 SyncGallery</h1>
 
-            video {
-                width: 300px;
-                margin: 10px;
-                border-radius: 10px;
-            }
+    <h2>
+        Fotos: {fotos}
+        <br>
+        Videos: {videos}
+    </h2>
 
-            .galeria {
-                display: flex;
-                flex-wrap: wrap;
-            }
-        </style>
-    </head>
-    <body>
+    <br>
 
-        <h1>📷 SyncGallery</h1>
+    <a href="/photos">
+        <button>
+            📸 Fotos
+        </button>
+    </a>
 
-        <h2>Fotos</h2>
-        <h3>
-            Fotos: """ + str(total_fotos) + """
-            &nbsp;&nbsp;|&nbsp;&nbsp;
-            Videos: """ + str(total_videos) + """
-        </h3>
-        <a href="/clear">
-    <button>
-        🗑 Limpiar Todo
-    </button>
-</a>
+    <br><br>
 
-<br><br>
-        <div class="galeria">
-    """
+    <a href="/videos">
+        <button>
+            🎥 Videos
+        </button>
+    </a>
 
-    for foto in fotos:
+    <br><br>
 
-        html += f'''
-<div>
-
-<a href="/photo/{foto}" target="_blank">
-    <img src="/photo/{foto}">
-</a>
-
-<br>
-
-<a href="/delete/photo/{foto}">
-    <button>🗑 Borrar</button>
-</a>
-
-</div>
-'''
-
-    html += """
-        </div>
-
-        <h2>🎥 Videos</h2>
-
-        <div class="galeria">
-    """
-
-    for video in videos:
-
-       html += f'''
-<div>
-
-<video controls>
-    <source src="/video/{video}">
-</video>
-
-<br>
-
-<a href="/delete/video/{video}">
-    <button>🗑 Borrar</button>
-</a>
-
-</div>
-'''
-
-    html += """
-        </div>
+    <a href="/clear">
+        <button>
+            🗑 Limpiar Todo
+        </button>
+    </a>
 
     </body>
     </html>
     """
-
-    return html
 @app.route("/upload", methods=["POST"])
 def upload():
 
@@ -197,6 +137,8 @@ def upload():
         "ok": True,
         "archivo": file.filename
     }
+
+
 
 @app.route("/clear")
 @requires_auth
@@ -230,6 +172,103 @@ def files():
             VIDEOS_FOLDER
         )
     }
+
+@app.route("/photos")
+@requires_auth
+def photos():
+
+    fotos = os.listdir(PHOTOS_FOLDER)
+
+    html = """
+    <html>
+    <body style="
+        font-family:Arial;
+        background:#111;
+        color:white;
+        text-align:center;
+    ">
+    <h1>📸 Fotos</h1>
+    <a href="/">⬅ Volver</a>
+    <br><br>
+    """
+
+    for foto in fotos:
+
+        html += f"""
+        <div style="margin:20px;">
+
+            <a href="/photo/{foto}" target="_blank">
+                <img
+                    src="/photo/{foto}"
+                    width="300"
+                    style="border-radius:10px;"
+                >
+            </a>
+
+            <br><br>
+
+            <a href="/delete/photo/{foto}">
+                <button>
+                    🗑 Borrar
+                </button>
+            </a>
+
+        </div>
+        """
+
+    html += "</body></html>"
+
+    return html
+
+@app.route("/videos")
+@requires_auth
+def videos():
+
+    videos = os.listdir(VIDEOS_FOLDER)
+
+    html = """
+    <html>
+    <body style="
+        font-family:Arial;
+        background:#111;
+        color:white;
+        text-align:center;
+    ">
+    <h1>🎥 Videos</h1>
+    <a href="/">⬅ Volver</a>
+    <br><br>
+    """
+
+    for video in videos:
+
+        html += f"""
+        <div style="margin:20px;">
+
+            <video
+                controls
+                width="500"
+            >
+                <source
+                    src="/video/{video}"
+                >
+            </video>
+
+            <br><br>
+
+            <a href="/delete/video/{video}">
+                <button>
+                    🗑 Borrar
+                </button>
+            </a>
+
+        </div>
+        """
+
+    html += "</body></html>"
+
+    return html
+
+
 @app.route("/photo/<filename>")
 @requires_auth
 def photo(filename):
@@ -261,7 +300,7 @@ def delete_photo(filename):
 
     return """
     <script>
-    window.location='/'
+   window.location='/photos'
     </script>
     """
 @app.route("/delete/video/<filename>")
@@ -278,7 +317,7 @@ def delete_video(filename):
 
     return """
     <script>
-    window.location='/'
+    window.location='/videos'
     </script>
     """
 
