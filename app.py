@@ -10,26 +10,13 @@ os.makedirs(UPLOAD_FOLDER, exist_ok=True)
 def home():
     return "SyncGallery Backend OK"
 
-@app.route("/upload", methods=["POST"])
-def upload():
+@app.route("/files")
+def files():
 
-    if "photo" not in request.files:
-        return {"error": "No photo"}, 400
-
-    file = request.files["photo"]
-
-    os.makedirs("uploads", exist_ok=True)
-
-    ruta = os.path.join(
-        "uploads",
-        file.filename
-    )
-
-    file.save(ruta)
+    import os
 
     return {
-        "ok": True,
-        "archivo": file.filename
+        "files": os.listdir("uploads")
     }
 
 if __name__ == "__main__":
