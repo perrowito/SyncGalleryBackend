@@ -18,8 +18,10 @@ def upload():
 
     file = request.files["photo"]
 
+    os.makedirs("uploads", exist_ok=True)
+
     ruta = os.path.join(
-        UPLOAD_FOLDER,
+        "uploads",
         file.filename
     )
 
@@ -27,7 +29,7 @@ def upload():
 
     return {
         "ok": True,
-        "filename": file.filename
+        "archivo": file.filename
     }
 
 if __name__ == "__main__":
