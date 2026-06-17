@@ -63,7 +63,8 @@ def home():
 
     fotos = os.listdir(PHOTOS_FOLDER)
     videos = os.listdir(VIDEOS_FOLDER)
-
+    total_fotos = len(fotos)
+    total_videos = len(videos)
     html = """
     <html>
     <head>
@@ -99,17 +100,38 @@ def home():
         <h1>📷 SyncGallery</h1>
 
         <h2>Fotos</h2>
+        <h3>
+            Fotos: """ + str(total_fotos) + """
+            &nbsp;&nbsp;|&nbsp;&nbsp;
+            Videos: """ + str(total_videos) + """
+        </h3>
+        <a href="/clear">
+    <button>
+        🗑 Limpiar Todo
+    </button>
+</a>
 
+<br><br>
         <div class="galeria">
     """
 
     for foto in fotos:
 
         html += f'''
-        <a href="/photo/{foto}" target="_blank">
-            <img src="/photo/{foto}">
-        </a>
-        '''
+<div>
+
+<a href="/photo/{foto}" target="_blank">
+    <img src="/photo/{foto}">
+</a>
+
+<br>
+
+<a href="/delete/photo/{foto}">
+    <button>🗑 Borrar</button>
+</a>
+
+</div>
+'''
 
     html += """
         </div>
@@ -121,11 +143,21 @@ def home():
 
     for video in videos:
 
-        html += f'''
-        <video controls>
-            <source src="/video/{video}">
-        </video>
-        '''
+       html += f'''
+<div>
+
+<video controls>
+    <source src="/video/{video}">
+</video>
+
+<br>
+
+<a href="/delete/video/{video}">
+    <button>🗑 Borrar</button>
+</a>
+
+</div>
+'''
 
     html += """
         </div>
@@ -214,6 +246,41 @@ def video(filename):
         VIDEOS_FOLDER,
         filename
     )
+    
+@app.route("/delete/photo/<filename>")
+@requires_auth
+def delete_photo(filename):
+
+    ruta = os.path.join(
+        PHOTOS_FOLDER,
+        filename
+    )
+
+    if os.path.exists(ruta):
+        os.remove(ruta)
+
+    return """
+    <script>
+    window.location='/'
+    </script>
+    """
+@app.route("/delete/video/<filename>")
+@requires_auth
+def delete_video(filename):
+
+    ruta = os.path.join(
+        VIDEOS_FOLDER,
+        filename
+    )
+
+    if os.path.exists(ruta):
+        os.remove(ruta)
+
+    return """
+    <script>
+    window.location='/'
+    </script>
+    """
 
 if __name__ == "__main__":
     app.run(host="0.0.0.0", port=5000)
